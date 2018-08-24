@@ -16,6 +16,16 @@
             <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
             <button type="submit">Add item</button>
         </form>
+        <form id="list-filter-form">
+            <label for="filtering-items">Only show items containing:</label>
+            <input type="text" name="filtering-items" class="js-text-filter">
+            <button id="js-filter-text">Filter</button>
+            <button id="js-clear-filter-btn">Clear Filter</button>
+        </form> 
+        <form>   
+            <label for="display-checked-items">Display checked items:</label>
+            <input type="checkbox" name="display-checked-items" class="js-display-checked" checked> 
+        </form>
         <ul class="shopping-list js-shopping-list">
         </ul>
     </div>
