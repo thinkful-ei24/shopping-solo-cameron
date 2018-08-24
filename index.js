@@ -3,29 +3,51 @@
 
 const STORE = {
   items: [
-    {name: 'apples', checked: false},
-    {name: 'oranges', checked: false},
-    {name: 'milk', checked: true},
-    {name: 'bread', checked: false}
+    {name: 'apples', checked: false, edit: false},
+    {name: 'oranges', checked: false, edit: false},
+    {name: 'milk', checked: true, edit: false},
+    {name: 'bread', checked: false, edit: true}
   ],
   displayAll: true,
   filterBy: ''
 };
 
 function generateHtml(item, index){
+  if (!item.edit){
+    return `
+      <li class="js-item-index-element" 
+      data-item-index="${index}">
+        <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
+        <div class="shopping-item-controls">
+          <button class="shopping-item-toggle js-item-toggle">
+              <span class="button-label">check</span>
+          </button>
+          <button class="shopping-item-delete js-item-delete">
+              <span class="button-label">delete</span>
+          </button>
+        </div>
+      </li>`;}
   return `
     <li class="js-item-index-element" 
-    data-item-index="${index}">
-      <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
+      data-item-index="${index}">
+      <form id="js-edit-list-item">
+      <label for="edit-list-item"></label>
+      <input type="text" name="edit-list-item" class="js-edit-list-item>
       <div class="shopping-item-controls">
-        <button class="shopping-item-toggle js-item-toggle">
-            <span class="button-label">check</span>
-        </button>
-        <button class="shopping-item-delete js-item-delete">
-            <span class="button-label">delete</span>
+        <button>
+          <span class="button-label">Update item</span>
         </button>
       </div>
-    </li>`;
+      </form>
+        <div class="shopping-item-controls">
+          <button class="shopping-item-toggle js-item-toggle">
+              <span class="button-label">check</span>
+          </button>
+          <button class="shopping-item-delete js-item-delete">
+              <span class="button-label">delete</span>
+          </button>
+        </div>
+      </li>`;
 }
 
 function renderShoppingList(){
@@ -46,7 +68,7 @@ function handleNewItemSubmit(){
     const itemField = $('.js-shopping-list-entry');
     const name = itemField.val();
     itemField.val('');
-    STORE.items.push({name, checked: false});
+    STORE.items.push({name, checked: false, edit: false});
     renderShoppingList();
   });
 }
@@ -93,6 +115,15 @@ function handleClearFilter(){
   });
 }
 
+function handleInitialItemEdit(){
+  $('.js-shopping-list').on('click', '.js-shopping-item',function(event){
+    const index = $(this).parents('.js-item-index-element').attr('data-item-index');
+    STORE.items[index].edit = true;
+    console.log('ehlej');
+    renderShoppingList();  
+  });
+}
+
 function handleShoppingList(){
   renderShoppingList();
   handleNewItemSubmit();
@@ -101,6 +132,7 @@ function handleShoppingList(){
   handleDisplayChecked();
   handleTextFilter();
   handleClearFilter();
+  handleInitialItemEdit();
 }
 
 $(handleShoppingList);
