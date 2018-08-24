@@ -32,10 +32,10 @@ function generateHtml(item, index){
       data-item-index="${index}">
       <form id="js-edit-list-item">
       <label for="edit-list-item"></label>
-      <input type="text" name="edit-list-item" class="js-edit-list-item>
+      <input type="text" name="edit-list-item" value = "${item.name}" class="js-edit-list-item">
       <div class="shopping-item-controls">
         <button>
-          <span class="button-label">Update item</span>
+          <span class="button-label js-update-item">Update item</span>
         </button>
       </div>
       </form>
@@ -119,8 +119,18 @@ function handleInitialItemEdit(){
   $('.js-shopping-list').on('click', '.js-shopping-item',function(event){
     const index = $(this).parents('.js-item-index-element').attr('data-item-index');
     STORE.items[index].edit = true;
-    console.log('ehlej');
     renderShoppingList();  
+  });
+}
+
+function handleItemUpdate(){
+  $('.js-shopping-list').on('click', '.js-update-item', function(event){
+    event.preventDefault();
+    const index = $(this).parents('.js-item-index-element').attr('data-item-index');
+    const updatedText = $(this).parents('.shopping-item-controls').prev('.js-edit-list-item').val();
+    STORE.items[index].name = updatedText;
+    STORE.items[index].edit = false;
+    renderShoppingList();
   });
 }
 
@@ -133,6 +143,7 @@ function handleShoppingList(){
   handleTextFilter();
   handleClearFilter();
   handleInitialItemEdit();
+  handleItemUpdate();
 }
 
 $(handleShoppingList);
