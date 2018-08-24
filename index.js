@@ -2,12 +2,7 @@
 'use strict';
 
 const STORE = {
-  items: [
-    {name: 'apples', checked: false, edit: false},
-    {name: 'oranges', checked: false, edit: false},
-    {name: 'milk', checked: true, edit: false},
-    {name: 'bread', checked: false, edit: true}
-  ],
+  items: [],
   displayAll: true,
   filterBy: ''
 };
@@ -52,13 +47,16 @@ function generateHtml(item, index){
 
 function renderShoppingList(){
   let displayedItems = [...STORE.items];
+  for (let i=0; i<displayedItems.length; i++){
+    displayedItems[i].indexer = i;
+  }
   if (!STORE.displayAll){
     displayedItems = displayedItems.filter(item => !item.checked);
   }
   if (STORE.filterBy !== ''){
     displayedItems = displayedItems.filter(item => item.name.includes(STORE.filterBy));
   }
-  const itemHtml = displayedItems.map((item, index) => generateHtml(item, index)).join('');
+  const itemHtml = displayedItems.map(item => generateHtml(item, item.indexer)).join('');
   $('.js-shopping-list').html(itemHtml);
 }
 
@@ -77,6 +75,7 @@ function handleItemCheckClicked(){
   $('.js-shopping-list').on('click', '.js-item-toggle', function(event){
     const index = $(this).parents('.js-item-index-element').attr('data-item-index');
     STORE.items[index].checked = !STORE.items[index].checked;
+    console.log(STORE.items);
     renderShoppingList();
   });
 }
